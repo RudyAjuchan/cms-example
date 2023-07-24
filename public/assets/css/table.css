@@ -31,6 +31,13 @@ table.dataTable.display tbody tr:hover {
     /*bg-indigo-100*/
 }
 
+/*Row Hover*/
+.dark table.dataTable.hover tbody tr:hover,
+.dark table.dataTable.display tbody tr:hover {
+    background-color: #425770;
+    /*bg-indigo-100*/
+}
+
 /*Pagination Buttons*/
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     font-weight: 700;
@@ -79,4 +86,28 @@ table.dataTable.no-footer {
     /*border-b-1 border-gray-300*/
     margin-top: 0.75em;
     margin-bottom: 0.75em;
+}
+.dark #table_data_filter input{
+    background-color: #1D2A39;
+    border-color: #3D4D60;
+    color: gray;
+}
+
+.dark #table_data2_filter input{
+    background-color: #1D2A39;
+    border-color: #3D4D60;
+    color: rgb(190, 190, 190);
+}
+
+.dark #deleteItems, .dark #restoreItems{
+    background-color: #1D2A39;
+    border-color: #3D4D60;
+    color: rgb(190, 190, 190);
+}
+#table_data_length select, #table_data2_length select{
+    width: 60px;
+}
+
+#restoreItems, #deleteItems{
+    padding-right: 35px;
 }

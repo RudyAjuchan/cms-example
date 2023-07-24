@@ -58,10 +58,6 @@
                             <th></th>
                             <th>Categoria</th>
                             <th>Acciones</th>
-                            <th>Acciones</th>
-                            <th>Acciones</th>
-                            <th>Acciones</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -69,10 +65,6 @@
                             <td>1</td>
                             <td>1</td>
                             <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
                             <td class="text-center">
                                 <a href="#" class="inline-flex items-center justify-center rounded-md bg-danger py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
                                     <i class="fa-solid fa-trash"></i>
@@ -81,24 +73,7 @@
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td class="text-center">
-                                <a href="#" class="inline-flex items-center justify-center rounded-md bg-danger py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a>
-                                <a href="#" class="inline-flex items-center justify-center rounded-md bg-warning py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                            </td>
-                        </tr>
+                        </tr>                        
                     </tbody>
                     <tr>
                         <td colspan="8">
