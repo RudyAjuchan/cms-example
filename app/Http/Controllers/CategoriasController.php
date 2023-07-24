@@ -12,7 +12,9 @@ class CategoriasController extends Controller
      */
     public function index()
     {
-        return view('categoria');
+        $categorias = Categorias::where('estado',1);
+        $categoriasPapelera = Categorias::where('estado',0);
+        return view('categoria', compact('categorias', 'categoriasPapelera'));
     }
 
     /**

@@ -61,10 +61,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($categorias as $CAT)
                         <tr>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>Tecnología</td>
+                            <td>{{ $CAT['id'] }}</td>
+                            <td>{{ $CAT['id'] }}</td>
+                            <td>{{ $CAT['nombre'] }}</td>
                             <td class="text-center">
                                 <a href="#" class="inline-flex items-center justify-center rounded-md bg-danger py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
                                     <i class="fa-solid fa-trash"></i>
@@ -73,7 +74,8 @@
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
                             </td>
-                        </tr>                        
+                        </tr>
+                        @endforeach                        
                     </tbody>
                     <tr>
                         <td colspan="8">
@@ -97,42 +99,22 @@
                             <th>Id</th>
                             <th></th>
                             <th>Categoria</th>
-                            <th>Acciones</th>
-                            <th>Acciones</th>
-                            <th>Acciones</th>
-                            <th>Acciones</th>
                             <th>Restaurar</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($categoriasPapelera as $CATP)
                         <tr>
-                            <td>3</td>
-                            <td>3</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
+                            <td>{{ $CATP['id'] }}</td>
+                            <td>{{ $CATP['id'] }}</td>
+                            <td>{{ $CATP['nombre'] }}</td>
                             <td class="text-center">
                                 <a href="#" class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
                                     <i class="fa-solid fa-rotate-left"></i>
                                 </a>
                             </td>
                         </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>4</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td>Tecnología</td>
-                            <td class="text-center">
-                                <a href="#" class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
-                                    <i class="fa-solid fa-rotate-left"></i>
-                                </a>
-                            </td>
-                        </tr>
+                        @endforeach
                     </tbody>
                     <tr>
                         <td colspan="8">
