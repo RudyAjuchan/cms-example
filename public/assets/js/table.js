@@ -82,15 +82,6 @@ function mostrarPapelera() {
     $("#loaders").fadeOut();
 }
 
-function deleteAll() {
-    var data = table.column(1).checkboxes.selected();
-    let idsDelete = [];
-    $.each(data, function(key, id){
-        idsDelete.push(id);
-    });
-    console.log(idsDelete);
-}
-
 function restaurarAll() {
     var data = table2.column(1).checkboxes.selected();
     let idsRestore = [];
@@ -98,4 +89,12 @@ function restaurarAll() {
         idsRestore.push(id);
     });
     console.log(idsRestore);
+}
+
+function prueba(){
+    if ($("#toggle4").is(":checked")) {
+        console.log("esta seleccionado");
+    }else{
+        console.log("no esta selecionado");
+    }
 }

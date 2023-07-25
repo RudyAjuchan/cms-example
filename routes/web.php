@@ -27,8 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::get('/categorias', [CategoriasController::class, 'index'])->name('categoria.incex');
+    
+    Route::resource('/categorias', \App\Http\Controllers\CategoriasController::class); 
+    Route::post('/categorias/delete', [CategoriasController::class, 'deletes'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.4.1/css/rowReorder.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
     <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/css/table.css">
+    <link rel="stylesheet" href="{{asset('assets/css/table.css')}}">
     <!-- Scripts -->
     {{-- @vite(['resources/css/app.css']) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -38,7 +38,7 @@
             <!-- SIDEBAR HEADER -->
             <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
                 <a href="/dashboard">
-                    <img src="assets/images/logo_rudy.png" alt="Logo" />
+                    <img src="{{asset('assets/images/logo_rudy.png')}}" alt="Logo" />
                 </a>
 
                 <button class="block lg:hidden" @click.stop="sidebarToggle = !sidebarToggle">
@@ -139,7 +139,7 @@
                         </button>
                         <!-- Hamburger Toggle BTN -->
                         <a class="block flex-shrink-0 lg:hidden" href="/dashboard">
-                            <img src="assets/images/logo_rudy-icon.png" alt="Logo" width="30" />
+                            <img src="{{asset('assets/images/logo_rudy-icon.png')}}" alt="Logo" width="30" />
                         </a>
                     </div>
                     <div class="hidden sm:block">
@@ -183,7 +183,7 @@
                                 </span>
 
                                 <span class="h-12 w-12 rounded-full">
-                                    <img src="assets/images/user/user-01.png" alt="User" />
+                                    <img src="{{asset('assets/images/user/user-01.png')}}" alt="User" />
                                 </span>
 
                                 <svg :class="dropdownOpen && 'rotate-180'" class="hidden fill-current sm:block" width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -222,7 +222,7 @@
                 </div>
             </header>
             <!-- ===== Header End ===== -->
-
+            <script src="https://unpkg.com/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
             <!-- ===== Main Content Start ===== -->
             @yield('contenido')
         <!-- ===== Main Content End ===== -->
@@ -231,14 +231,14 @@
 
 
     </div>
-    <!-- ===== Page Wrapper End ===== -->
+    <!-- ===== Page Wrapper End ===== -->    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js"></script>
     <script src="https://cdn.datatables.net/rowreorder/1.4.1/js/dataTables.rowReorder.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     {{-- <script defer src="assets/js/bundle.js"></script> --}}
-    <script src="assets/js/table.js"></script>
+    <script src="{{asset('assets/js/table.js')}}"></script>
 </body>
 
 </html>

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->integer('estado')->default(1);
+            $table->integer('publicado')->default(1);
             $table->timestamps();
         });
     }

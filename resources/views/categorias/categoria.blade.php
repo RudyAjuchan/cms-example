@@ -25,7 +25,7 @@
 
         <div class="rounded-sm border border-stroke bg-white px-5  pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-14">
             <div class="flex justify-end" id="btn-new">
-                <a href="#" class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-5">
+                <a href="/categorias/create" class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-5">
                     <i class="fa-solid fa-plus"></i>&nbsp;Nuevo
                 </a>
             </div>
@@ -57,6 +57,7 @@
                             <th>Id</th>
                             <th></th>
                             <th>Categoria</th>
+                            <th>Publicado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -67,10 +68,25 @@
                             <td>{{ $CAT['id'] }}</td>
                             <td>{{ $CAT['nombre'] }}</td>
                             <td class="text-center">
-                                <a href="#" class="inline-flex items-center justify-center rounded-md bg-danger py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a>
-                                <a href="#" class="inline-flex items-center justify-center rounded-md bg-warning py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
+                                @if($CAT['publicado']==1)
+                                    <span class="text-white bg-success px-2 py-1 rounded-lg"><b>Si</b></span>
+                                @elseif($CAT['publicado']==0)
+                                    <span class="text-white bg-danger px-2 py-1 rounded-lg"><b>No</b></span>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                <form method="POST" action="/categorias/{{$CAT['id']}}" name="formD" id="formD">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button class="btn" id="buttonSubmit{{ $CAT['id'] }}"></button>
+                                </form>
+                                <button type="button" 
+                                    class="inline-flex items-center justify-center rounded-md bg-danger py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2"
+                                    onclick="eliminar({{$CAT['id']}})"
+                                    >
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                <a href="/categorias/{{$CAT['id']}}/edit" class="inline-flex items-center justify-center rounded-md bg-warning py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
                             </td>
@@ -135,4 +151,61 @@
     </div>
     </div>
 </main>
+
+<script>
+    function eliminar(id){
+        swal({
+            title: "¿Está seguro eliminar el dato",
+            text: "Esta acción es irreversible",
+            icon: "warning",
+            buttons: {
+                confirm: { text: "Si deseo eliminarlo", className: "sweet-warning" },
+                cancel: "Cancelar",
+            },
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                document.getElementById("buttonSubmit"+id).click();
+            } else {
+                swal("No se eliminó el dato");
+            }
+        });
+    }
+
+    function deleteAll() {
+        var data = table.column(1).checkboxes.selected();
+        let idsDelete = [];
+        $.each(data, function(key, id){
+            idsDelete.push(id);
+        });
+        var formData = new FormData();
+        formData.append('ids',idsDelete);
+        $.ajax({
+            type: "POST",
+            url: "/categorias/delete",
+            data: idsDelete,
+        }).done(function (response) {
+            console.log(response);
+            swal({
+                icon: "success",
+                title: "Atención",
+                text: "¡Se ha eliminado correctamente!",
+            }).then(function () {
+                window.location.href = "/categorias";
+            });
+        });
+    }
+</script>
+
+@if(Session::has('delete'))
+<script>
+    swal({
+        icon: "success",
+        title: "Atención",
+        text: "¡Se ha eliminado correctamente!",
+    }).then(function () {
+        window.location.href = "/categorias";
+    });
+</script>
+@endif
 @endsection
