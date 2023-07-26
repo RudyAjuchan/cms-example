@@ -85,15 +85,4 @@
     </div>
 </main>
 <!-- ===== Main Content End ===== -->
-@if(Session::has('success'))
-<script>
-    swal({
-        icon: "success",
-        title: "Atención",
-        text: "¡Se ha registrado correctamente!",
-    }).then(function () {
-        window.location.href = "/categorias";
-    });
-</script>
-@endif
 @endsection

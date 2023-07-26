@@ -203,3 +203,7 @@ span.flatpickr-weekday,
 [x-cloak] {
   display: none !important;
 }
+
+.sweet-primary{
+  background-color: #399eb8;
+}

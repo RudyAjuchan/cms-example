@@ -43,7 +43,7 @@ class CategoriasController extends Controller
         $categorias -> nombre = $request->nombre;
         $categorias -> publicado = $publicado;
         $categorias->save();
-        return redirect('/categorias/create')->with('success', 'Done!');
+        return redirect('/categorias')->with('success', 'Done!');
     }
 
     /**
@@ -80,7 +80,7 @@ class CategoriasController extends Controller
         $categorias -> nombre = $request->nombre;
         $categorias -> publicado = $publicado;
         $categorias->save();
-        return redirect('/categorias/'.$id.'/edit')->with('success', 'Done!');
+        return redirect('/categorias')->with('edit', 'Done!');
     }
 
     /**
@@ -95,6 +95,39 @@ class CategoriasController extends Controller
     }
 
     public function deletes(Request $request){
+        $datos = explode(",", $request->ids);
+        foreach($datos as $ID){
+            $categorias = Categorias::find($ID);
+            $categorias->estado = 0;
+            $categorias->save();
+        }
+        return $request;
+    }
+
+    public function deletesDefinitive(Request $request){
+        $datos = explode(",", $request->ids);
+        foreach($datos as $ID){
+            $categorias = Categorias::find($ID);            
+            $categorias->delete();
+        }
+        return $request;
+    }
+
+    public function restore($id)
+    {
+        $categorias = Categorias::find($id);
+        $categorias->estado = 1;
+        $categorias->save();
+        return redirect('/categorias')->with('restore', 'Done!');
+    }
+
+    public function restores(Request $request){
+        $datos = explode(",", $request->ids);        
+        foreach($datos as $ID){
+            $categorias = Categorias::find($ID);
+            $categorias->estado = 1;
+            $categorias->save();
+        }
         return $request;
     }
 }

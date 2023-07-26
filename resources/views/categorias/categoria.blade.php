@@ -57,8 +57,8 @@
                             <th>Id</th>
                             <th></th>
                             <th>Categoria</th>
-                            <th>Publicado</th>
-                            <th>Acciones</th>
+                            <th style="text-align: center;">Publicado</th>
+                            <th style="text-align: center;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -75,10 +75,10 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                <form method="POST" action="/categorias/{{$CAT['id']}}" name="formD" id="formD">
+                                <form method="POST" action="/categorias/{{$CAT['id']}}" name="formD" id="formD" style="display:none">
                                     @method('DELETE')
                                     @csrf
-                                    <button class="btn" id="buttonSubmit{{ $CAT['id'] }}"></button>
+                                    <button style="heigth:0px" id="buttonSubmit{{ $CAT['id'] }}"></button>
                                 </form>
                                 <button type="button" 
                                     class="inline-flex items-center justify-center rounded-md bg-danger py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2"
@@ -100,7 +100,7 @@
                                 <option value="1">Eliminar</option>
                                 <option value="2">Eliminar Definitivamente</option>
                             </select>
-                            <button type="button" onclick="deleteAll()" class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-3 xl:px-3">
+                            <button type="button" onclick="deletes()" class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-3 xl:px-3">
                                 Ok
                             </button>
                         </td>
@@ -115,7 +115,7 @@
                             <th>Id</th>
                             <th></th>
                             <th>Categoria</th>
-                            <th>Restaurar</th>
+                            <th style="text-align: center;">Restaurar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,9 +125,16 @@
                             <td>{{ $CATP['id'] }}</td>
                             <td>{{ $CATP['nombre'] }}</td>
                             <td class="text-center">
-                                <a href="#" class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2">
+                                <form method="POST" action="/categorias/restore/{{$CATP['id']}}" name="formR" id="formR" style="display:none">
+                                    @csrf
+                                    <button style="heigth:0px" id="buttonSubmitR{{ $CATP['id'] }}"></button>
+                                </form>
+                                <button type="button" 
+                                class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:px-2"
+                                onclick="restore({{$CATP['id']}})"
+                                >
                                     <i class="fa-solid fa-rotate-left"></i>
-                                </a>
+                                </button>
                             </td>
                         </tr>
                         @endforeach
@@ -136,9 +143,10 @@
                         <td colspan="8">
                             <label for="restoreItems">Para los elementos seleccionados: </label><br>
                             <select name="restoreItems" id="restoreItems">
-                                <option value="3">Restaurar Todos</option>
+                                <option value="3">Restaurar</option>
+                                <option value="4">Eliminar definitivamente</option>
                             </select>
-                            <button type="button" onclick="restaurarAll();" class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-3 xl:px-3">
+                            <button type="button" onclick="restores();" class="inline-flex items-center justify-center rounded-md bg-primary py-2 px-3 text-center font-medium text-white hover:bg-opacity-90 lg:px-3 xl:px-3">
                                 Ok
                             </button>
                         </td>
@@ -172,28 +180,260 @@
         });
     }
 
+    function deletes(){
+        var select = document.getElementById("deleteItems").value;
+        if(select==1){
+            deleteAll();
+        }else if( select==2){
+            deleteAllDefinitive();
+        }
+    }
     function deleteAll() {
         var data = table.column(1).checkboxes.selected();
         let idsDelete = [];
         $.each(data, function(key, id){
             idsDelete.push(id);
         });
-        var formData = new FormData();
-        formData.append('ids',idsDelete);
-        $.ajax({
-            type: "POST",
-            url: "/categorias/delete",
-            data: idsDelete,
-        }).done(function (response) {
-            console.log(response);
+        console.log(idsDelete.length);
+        if(idsDelete.length>0){
             swal({
-                icon: "success",
-                title: "Atención",
-                text: "¡Se ha eliminado correctamente!",
-            }).then(function () {
-                window.location.href = "/categorias";
+                title: "¿Está seguro eliminar los datos",
+                text: "Los datos iran a la palelera",
+                icon: "warning",
+                buttons: {
+                    confirm: { text: "Si deseo eliminarlo", className: "sweet-warning" },
+                    cancel: "Cancelar",
+                },
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {                
+                    var formData = new FormData();
+                    formData.append('ids',idsDelete);
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "/categorias/delete",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    }).done(function (response) {
+                        console.log(response);
+                        swal({
+                            icon: "success",
+                            title: "Atención",
+                            text: "¡Se ha eliminado correctamente!",
+                        }).then(function () {
+                            window.location.href = "/categorias";
+                        });
+                    });
+                } else {
+                    swal("No se eliminó los datos");
+                }            
             });
+        }else{
+            swal({
+                icon: "warning",
+                title: "Atención",
+                text: "¡No hay elementos seleccionados!",
+            })
+        }
+    }
+    function deleteAllDefinitive() {
+        var data = table.column(1).checkboxes.selected();
+        let idsDelete = [];
+        $.each(data, function(key, id){
+            idsDelete.push(id);
         });
+        console.log(idsDelete.length);
+        if(idsDelete.length>0){
+            swal({
+                title: "¿Está seguro eliminar los datos",
+                text: "Los datos se borraran definitivamente",
+                icon: "warning",
+                buttons: {
+                    confirm: { text: "Si deseo eliminarlo", className: "sweet-warning" },
+                    cancel: "Cancelar",
+                },
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {                
+                    var formData = new FormData();
+                    formData.append('ids',idsDelete);
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "/categorias/deleteDefinitive",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    }).done(function (response) {
+                        console.log(response);
+                        swal({
+                            icon: "success",
+                            title: "Atención",
+                            text: "¡Se ha eliminado correctamente!",
+                        }).then(function () {
+                            window.location.href = "/categorias";
+                        });
+                    });
+                } else {
+                    swal("No se eliminó los datos");
+                }            
+            });
+        }else{
+            swal({
+                icon: "warning",
+                title: "Atención",
+                text: "¡No hay elementos seleccionados!",
+            })
+        }
+    }
+    function deleteAllDefinitive2() {
+        var data = table2.column(1).checkboxes.selected();
+        let idsDelete = [];
+        $.each(data, function(key, id){
+            idsDelete.push(id);
+        });
+        console.log(idsDelete.length);
+        if(idsDelete.length>0){
+            swal({
+                title: "¿Está seguro eliminar los datos",
+                text: "Los datos se borraran definitivamente",
+                icon: "warning",
+                buttons: {
+                    confirm: { text: "Si deseo eliminarlo", className: "sweet-warning" },
+                    cancel: "Cancelar",
+                },
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {                
+                    var formData = new FormData();
+                    formData.append('ids',idsDelete);
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "/categorias/deleteDefinitive",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    }).done(function (response) {
+                        console.log(response);
+                        swal({
+                            icon: "success",
+                            title: "Atención",
+                            text: "¡Se ha eliminado correctamente!",
+                        }).then(function () {
+                            window.location.href = "/categorias";
+                        });
+                    });
+                } else {
+                    swal("No se eliminó los datos");
+                }            
+            });
+        }else{
+            swal({
+                icon: "warning",
+                title: "Atención",
+                text: "¡No hay elementos seleccionados!",
+            })
+        }
+    }
+
+    function restore(id){
+        swal({
+            title: "¿Está seguro restaurar el dato",
+            text: "Esta acción es irreversible",
+            icon: "info",
+            buttons: {
+                confirm: { text: "Si deseo restaurarlo", className: "sweet-primary" },
+                cancel: "Cancelar",
+            },
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                document.getElementById("buttonSubmitR"+id).click();
+            } else {
+                swal("No se restauró el dato");
+            }
+        });
+    }
+
+    function restores(){
+        var select = document.getElementById("restoreItems").value;
+        if(select==3){
+            restoreAll();
+        }else if( select==4){
+            deleteAllDefinitive2();
+        }
+    }
+    function restoreAll() {
+        var data = table2.column(1).checkboxes.selected();
+        let idsRestore = [];
+        $.each(data, function(key, id){
+            idsRestore.push(id);
+        });
+        if(idsRestore.length>0){
+            swal({
+                title: "¿Está seguro restaurar los datos",
+                text: "Los datos regresaran a la bandeja principal",
+                icon: "info",
+                buttons: {
+                    confirm: { text: "Si deseo restaurarlos", className: "sweet-primary" },
+                    cancel: "Cancelar",
+                },
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {                
+                    var formData = new FormData();
+                    formData.append('ids',idsRestore);
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "/categorias/restores",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    }).done(function (response) {
+                        console.log(response);
+                        swal({
+                            icon: "success",
+                            title: "Atención",
+                            text: "¡Se ha eliminado correctamente!",
+                        }).then(function () {
+                            window.location.href = "/categorias";
+                        });
+                    });
+                } else {
+                    swal("No se eliminó los datos");
+                }            
+            });
+        }else{
+            swal({
+                icon: "warning",
+                title: "Atención",
+                text: "¡No hay elementos seleccionados!",
+            })
+        }
     }
 </script>
 
@@ -203,9 +443,37 @@
         icon: "success",
         title: "Atención",
         text: "¡Se ha eliminado correctamente!",
-    }).then(function () {
-        window.location.href = "/categorias";
-    });
+    })
+</script>
+@endif
+
+@if(Session::has('restore'))
+<script>
+    swal({
+        icon: "success",
+        title: "Atención",
+        text: "¡Se ha restablecido correctamente!",
+    })
+</script>
+@endif
+
+@if(Session::has('success'))
+<script>
+    swal({
+        icon: "success",
+        title: "Atención",
+        text: "¡Se ha registrado correctamente!",
+    })
+</script>
+@endif
+
+@if(Session::has('edit'))
+<script>
+    swal({
+        icon: "success",
+        title: "Atención",
+        text: "¡Se ha actualizado correctamente!",
+    })
 </script>
 @endif
 @endsection

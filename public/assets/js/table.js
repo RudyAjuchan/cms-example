@@ -82,14 +82,6 @@ function mostrarPapelera() {
     $("#loaders").fadeOut();
 }
 
-function restaurarAll() {
-    var data = table2.column(1).checkboxes.selected();
-    let idsRestore = [];
-    $.each(data, function(key, id){
-        idsRestore.push(id);
-    });
-    console.log(idsRestore);
-}
 
 function prueba(){
     if ($("#toggle4").is(":checked")) {

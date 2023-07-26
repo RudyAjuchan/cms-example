@@ -9,7 +9,7 @@
         <!-- Breadcrumb Start -->
         <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h2 class="text-title-md2 font-bold text-black dark:text-white">
-                Nueva Categoria
+                Editar Categoria
             </h2>
 
             <nav>
@@ -17,7 +17,7 @@
                     <li><a class="font-medium" href="/dashboard">Dashboard /</a></li>
                     <li><a class="font-medium" href="#">Contenido /</a></li>
                     <li><a class="font-medium" href="/categorias">Categorias /</a></li>
-                    <li class="font-medium text-primary">Nuevo</li>
+                    <li class="font-medium text-primary">Editar</li>
                 </ol>
             </nav>
         </div>
@@ -97,15 +97,4 @@
     </div>
 </main>
 <!-- ===== Main Content End ===== -->
-@if(Session::has('success'))
-<script>
-    swal({
-        icon: "success",
-        title: "Atención",
-        text: "¡Se ha actualizado correctamente!",
-    }).then(function () {
-        window.location.href = "/categorias";
-    });
-</script>
-@endif
 @endsection

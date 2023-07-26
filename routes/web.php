@@ -29,7 +29,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     Route::resource('/categorias', \App\Http\Controllers\CategoriasController::class); 
-    Route::post('/categorias/delete', [CategoriasController::class, 'deletes'])->name('profile.destroy');
+    Route::post('/categorias/delete', [CategoriasController::class, 'deletes'])->name('categorias.deletes');
+    Route::post('/categorias/deleteDefinitive', [CategoriasController::class, 'deletesDefinitive'])->name('categorias.deletesDefinitive');
+    Route::post('/categorias/restore/{id}', [CategoriasController::class, 'restore'])->name('categorias.restore');
+    Route::post('/categorias/restores', [CategoriasController::class, 'restores'])->name('categorias.restores');
 });
 
 require __DIR__.'/auth.php';
