@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/deleteDefinitive', [PostsController::class, 'deletesDefinitive'])->name('posts.deletesDefinitive');
     Route::post('/posts/restore/{id}', [PostsController::class, 'restore'])->name('posts.restore');
     Route::post('/posts/restores', [PostsController::class, 'restores'])->name('posts.restores');
+    Route::post('/postsImg/temp-upload', [PostsController::class, 'tempUpload'])->name('posts.restores');
+    Route::delete('/postsImg/temp-delete', [PostsController::class, 'tempDelete'])->name('posts.restores');
     /* ================= FIN POSTS ======================== */
 });
 

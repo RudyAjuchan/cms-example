@@ -26,7 +26,7 @@
         <!-- ====== Form Elements Section Start -->
         <div class="grid grid-cols-1 gap-9 sm:grid-cols-1">
             <div class="flex flex-col gap-9">
-                <form method="POST" action="{{ url('/posts') }}">
+                <form method="POST" action="{{ url('/posts') }}" enctype="multipart/form-data">
                     @csrf
                     <!-- Input Fields -->
                     <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -40,8 +40,9 @@
                                 <label class="mb-3 block font-medium text-sm text-black dark:text-white">
                                     Nombre <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" name="nombre" placeholder="Nombre Post" class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
+                                <input type="text" name="nombre" onkeyup="slugCreate();" placeholder="Nombre Post" class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
                                     value="{{ old('nombre')}}"
+                                    id="slugNombre"
                                 />
                                 @error('nombre')
                                     <b><small style="color: red"> {{$message}} </small></b>
@@ -52,7 +53,7 @@
                                 <label class="mb-3 block font-medium text-sm text-black dark:text-white">
                                     Slug <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" name="slug" placeholder="Slug" class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
+                                <input type="text" name="slug" id="slug" readonly placeholder="Slug" class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
                                     value="{{ old('slug')}}"
                                 />
                                 @error('slug')
@@ -98,19 +99,25 @@
                                             <i class="fa-solid fa-box-open"></i>
                                         </span>
                                         <select
-                                            class="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-12 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input">
+                                            class="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-12 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
+                                            name="categorias_id"
+                                            >
                                             <option value="" disabled selected hidden>Seleccione categoria</option>
                                             @foreach ($categorias as $CAT)
                                                 <option value="{{$CAT['id']}}">{{$CAT['nombre']}}</option>
                                             @endforeach
                                         </select>
                                     </div>
+                                    @error('categorias_id')
+                                        <b><small style="color: red"> {{$message}} </small></b>
+                                    @enderror
                                 </div>
 
                                 <div class="content-tag">
                                     <label class="mb-3 block font-medium text-sm text-black dark:text-white">
                                         Tags (presione la barra espaciadora por cada tag) 
                                     </label>
+                                    <input type="hidden" name="tagsG" id="tagsG">
                                     <ul id="ulTag">
                                     <input type="text" name="tags" id="InputTags" placeholder="Tags" 
                                         value="{{ old('tags')}}"
@@ -168,6 +175,31 @@
         .catch( error => {
             console.error( error );
         } );
+    
+    function slugCreate(){
+        var nombre = document.getElementById("slugNombre").value;
+        nombre = nombre.replace(/\s/g, '-');
+        nombre = nombre.toLowerCase();
+        document.getElementById("slug").value = nombre;
+    }
+
+    FilePond.registerPlugin(FilePondPluginImagePreview);
+    FilePond.registerPlugin(FilePondPluginFileValidateType);
+    // Get a reference to the file input element
+    const inputElement = document.querySelector('input[type="file"]');
+
+    // Create a FilePond instance
+    const pond = FilePond.create(inputElement);
+    FilePond.setOptions({
+        server: {
+            process: '/postsImg/temp-upload',
+            revert: '/postsImg/temp-delete',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        },
+        acceptedFileTypes: ['image/*'],
+    });
 </script>
 <!-- ===== Main Content End ===== -->
 @endsection
