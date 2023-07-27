@@ -111,3 +111,59 @@ table.dataTable.no-footer {
 #restoreItems, #deleteItems{
     padding-right: 35px;
 }
+
+/* =================INPUT TAGS================= */
+.dark .ck-toolbar__items{
+    background-color: #1D2A39 !important;
+    border-color: gray !important;
+}
+.dark .ck-button__icon, .dark .ck-dropdown__button{
+    color: white !important;
+}
+.dark .ck-off:hover, .dark .ck-off:hover{
+    background-color: #50637b !important;
+}
+.dark .ck-content{
+    background-color: #1D2A39 !important;
+    border-color: gray !important;
+}
+.dark .ck-toolbar{
+    border-color: gray !important;
+    background-color: #1D2A39 !important;
+}
+/* =================PARA TAGS================= */
+.content-tag ul{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 7px;
+    margin: 12px 0;
+    border-radius: 5px;
+    border: 1px solid #a6a6a6;
+}
+.content-tag ul  li{
+    color: #333;
+    margin: 4px 3px;
+    list-style: none;
+    border-radius: 5px;
+    background: #F2F2F2;
+    padding: 5px 8px 5px 10px;
+    border: 1px solid #e3e1e1;
+}
+.content-tag ul li i{
+    height: 20px;
+    width: 20px;
+    color: #808080;
+    margin-left: 8px;
+    font-size: 19px;
+    cursor: pointer;
+    border-radius: 50%;
+    background: #dfdfdf;
+    justify-content: center;
+}
+.content-tag ul input{
+    flex: 1;
+    padding: 5px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}

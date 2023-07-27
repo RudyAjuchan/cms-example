@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,11 +29,21 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
+    /* ================= PARA CATEGORIAS ======================== */
     Route::resource('/categorias', \App\Http\Controllers\CategoriasController::class); 
     Route::post('/categorias/delete', [CategoriasController::class, 'deletes'])->name('categorias.deletes');
     Route::post('/categorias/deleteDefinitive', [CategoriasController::class, 'deletesDefinitive'])->name('categorias.deletesDefinitive');
     Route::post('/categorias/restore/{id}', [CategoriasController::class, 'restore'])->name('categorias.restore');
     Route::post('/categorias/restores', [CategoriasController::class, 'restores'])->name('categorias.restores');
+    /* ================= FIN CATEGORIAS ======================== */
+
+    /* ================= PARA POSTS ======================== */
+    Route::resource('/posts', \App\Http\Controllers\PostsController::class); 
+    Route::post('/posts/delete', [PostsController::class, 'deletes'])->name('posts.deletes');
+    Route::post('/posts/deleteDefinitive', [PostsController::class, 'deletesDefinitive'])->name('posts.deletesDefinitive');
+    Route::post('/posts/restore/{id}', [PostsController::class, 'restore'])->name('posts.restore');
+    Route::post('/posts/restores', [PostsController::class, 'restores'])->name('posts.restores');
+    /* ================= FIN POSTS ======================== */
 });
 
 require __DIR__.'/auth.php';
