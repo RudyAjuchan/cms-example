@@ -1,7 +1,13 @@
 const ul = document.getElementById("ulTag"),
 input = document.getElementById("InputTags");
+let tagsDefault = document.getElementById("tagsG").value;
 
-tags = [];
+if(tagsDefault!="" && tagsDefault!=null){
+    tags = JSON.parse(tagsDefault);
+    createTag();
+}else{
+    tags = [];
+}
 
 input.addEventListener("keyup", addTag);
 
@@ -25,12 +31,12 @@ function createTag(){
         ul.insertAdjacentHTML("afterbegin", liTag);
     });
 
-    document.getElementById('tagsG').value=tags;
+    document.getElementById('tagsG').value=JSON.stringify(tags);
 }
 
 function remove(element, tag){
     let index  = tags.indexOf(tag);
     tags = [...tags.slice(0, index), ...tags.slice(index + 1)];
     element.parentElement.remove();
-    document.getElementById('tagsG').value=tags;
+    document.getElementById('tagsG').value=JSON.stringify(tags);
 }

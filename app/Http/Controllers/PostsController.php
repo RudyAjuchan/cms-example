@@ -42,21 +42,56 @@ class PostsController extends Controller
             'categorias_id' => ['required'],
         ]);
 
-        $publicado = 0;
-        if($request->publicado == "on"){
-            $publicado = 1;
+        $temp_file = TemporalFile::where('folder', $request->image)->first();
+
+        if($temp_file){
+            Storage::copy('posts/temp/'.$temp_file->folder.'/'.$temp_file->file, 'posts/'.$temp_file->folder.'/'.$temp_file->file);
+
+            $publicado = 0;
+            if($request->publicado == "on"){
+                $publicado = 1;
+            }
+
+            $datosTags = json_decode(stripslashes($request->tagsG),true);
+
+            $data = [
+                'nombre' => $request->nombre,
+                /* 'slug' => $request->slug, */
+                'image' => $temp_file->folder.'/'.$temp_file->file,
+                'body' => $request->body,
+                'publicado' => $publicado,
+                'tags' => $datosTags,
+                'categorias_id' => $request->categorias_id,
+            ];
+
+            $post = posts::create($data);
+            /* $post = new posts();
+            $post->nombre = $request->nombre;
+            $post->slug = $request->slug;
+            $post->image = $temp_file->folder.'/'.$temp_file->file;
+            $post->body = $request->body;
+            $post->publicado = $publicado;
+            $post->tags = $datosTags;
+            $post->categorias_id = $request->categorias_id;
+            $post->save(); */
+
+            Storage::deleteDirectory('posts/temp/'.$temp_file->folder);
+            $temp_file->delete();
+            return redirect('/posts')->with('success', 'Done!');
         }
 
-        $post = new posts();
-        $post->nombre = $request->nombre;
-        $post->slug = $request->slug;
-        $post->image = $request->image;
-        $post->body = $request->body;
-        $post->publicado = $publicado;
-        $post->tags = $request->tagsG;
-        $post->categorias_id = $request->categorias_id;
-        $post->save();
-        return redirect('/posts')->with('success', 'Done!');
+        /* $datosTags = json_decode(stripslashes($request->tagsG),true);
+        $data = [
+            'nombre' => 'a',
+            'slug' => 'a',
+            'image' => 'a',
+            'body' => 'a',
+            'publicado' => 'a',
+            'tags' => $datosTags,
+            'categorias_id' => 'a',
+        ];
+
+        return compact('datosTags', 'data'); */
     }
 
     /**
@@ -64,15 +99,17 @@ class PostsController extends Controller
      */
     public function show(posts $posts)
     {
-        //
+        return $posts;
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(posts $posts)
+    public function edit($id)
     {
-        //
+        $post = posts::find($id);
+        $categorias = Categorias::all();
+        return view('posts.edit', compact('post', 'categorias'));
     }
 
     /**

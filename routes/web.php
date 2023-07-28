@@ -38,13 +38,15 @@ Route::middleware('auth')->group(function () {
     /* ================= FIN CATEGORIAS ======================== */
 
     /* ================= PARA POSTS ======================== */
+    Route::get('/posts/create', [PostsController::class, 'create'])->name('posts.create');//Usando el slug
+    Route::get('/posts/{posts}', [PostsController::class, 'show'])->name('posts.show');//Usando el slug    
     Route::resource('/posts', \App\Http\Controllers\PostsController::class); 
     Route::post('/posts/delete', [PostsController::class, 'deletes'])->name('posts.deletes');
     Route::post('/posts/deleteDefinitive', [PostsController::class, 'deletesDefinitive'])->name('posts.deletesDefinitive');
     Route::post('/posts/restore/{id}', [PostsController::class, 'restore'])->name('posts.restore');
     Route::post('/posts/restores', [PostsController::class, 'restores'])->name('posts.restores');
     Route::post('/postsImg/temp-upload', [PostsController::class, 'tempUpload'])->name('posts.restores');
-    Route::delete('/postsImg/temp-delete', [PostsController::class, 'tempDelete'])->name('posts.restores');
+    Route::delete('/postsImg/temp-delete', [PostsController::class, 'tempDelete'])->name('posts.restores');    
     /* ================= FIN POSTS ======================== */
 });
 

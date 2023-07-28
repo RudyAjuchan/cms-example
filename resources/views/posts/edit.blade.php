@@ -16,7 +16,7 @@
                 <ol class="flex items-center gap-2">
                     <li><a class="font-medium" href="/dashboard">Dashboard /</a></li>
                     <li><a class="font-medium" href="#">Contenido /</a></li>
-                    <li><a class="font-medium" href="/categorias">Categorias /</a></li>
+                    <li><a class="font-medium" href="/posts">Posts /</a></li>
                     <li class="font-medium text-primary">Editar</li>
                 </ol>
             </nav>
@@ -25,8 +25,8 @@
         
         <!-- ====== Form Elements Section Start -->
         <div class="grid grid-cols-1 gap-9 sm:grid-cols-1">
-            <div class="flex flex-col gap-9">
-                <form method="POST" action="/categorias/{{$id}}">
+            <div class="flex flex-col gap-9">                
+                <form method="POST" action="/posts/{{$post->id}}" enctype="multipart/form-data">
                     @method("PUT")
                     @csrf
                     <!-- Input Fields -->
@@ -35,35 +35,113 @@
                             <h3 class="font-medium text-black dark:text-white">
                                 Complete los campos
                             </h3>
-                        </div>                        
-                        <div class="flex flex-col gap-5.5 p-6.5" style="padding: 25px 15rem;">
+                        </div>
+                        <div class="flex flex-col gap-5.5 p-6.5" style="padding: 25px 2rem;">
                             <div>
                                 <label class="mb-3 block font-medium text-sm text-black dark:text-white">
-                                    Nombre
+                                    Nombre <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" name="nombre" placeholder="Nombre Categoria" 
-                                class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
-                                value="{{$nombre}}"
+                                <input type="text" name="nombre" onkeyup="slugCreate();" placeholder="Nombre Post" class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"                                     
+                                    id="slugNombre"
+                                    value="{{$post->nombre}}"
                                 />
                                 @error('nombre')
                                     <b><small style="color: red"> {{$message}} </small></b>
                                 @enderror
                             </div>
 
+                            <div>
+                                <label class="mb-3 block font-medium text-sm text-black dark:text-white">
+                                    Slug <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" name="slug" id="slug" readonly placeholder="Slug" class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
+                                    value="{{ $post->slug }}"
+                                />
+                                @error('slug')
+                                    <b><small style="color: red"> {{$message}} </small></b>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label class="mb-3 block font-medium text-sm text-black dark:text-white">
+                                    Descripción <span class="text-danger">*</span>
+                                </label>
+                                <textarea name="body" id="body" cols="30" rows="10" placeholder="Descripción del post"
+                                class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"                                
+                                >{{ $post->body }}</textarea>
+                                @error('body')
+                                    <b><small style="color: red"> {{$message}} </small></b>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label class="mb-3 block font-medium text-sm text-black dark:text-white">
+                                    Imagen <span class="text-danger">*</span>
+                                </label>
+                                <input type="file"
+                                    name="image"
+                                    class="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter dark:file:bg-white/30 dark:file:text-white file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:focus:border-primary" 
+                                    value="{{ $post->image }}"
+                                    />
+                                
+                                @error('image')
+                                    <b><small style="color: red"> {{$message}} </small></b>
+                                @enderror
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-9 sm:grid-cols-2">
+                                <div>
+                                    <label class="mb-3 block font-medium text-sm text-black dark:text-white">
+                                    Seleccione Categoria <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="relative z-20 bg-white dark:bg-form-input">
+                                        <span class="absolute top-1/2 left-4 z-30 -translate-y-1/2">
+                                            <i class="fa-solid fa-box-open"></i>
+                                        </span>
+                                        <select
+                                            class="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-12 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
+                                            name="categorias_id"
+                                            >
+                                            <option value="" disabled selected hidden>Seleccione categoria</option>
+                                            @foreach ($categorias as $CAT)
+                                                @if($CAT['id']==$post->categorias_id)
+                                                    <option value="{{$CAT['id']}}" selected>{{$CAT['nombre']}}</option>
+                                                @else
+                                                    <option value="{{$CAT['id']}}">{{$CAT['nombre']}}</option>
+                                                @endif                                                
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('categorias_id')
+                                        <b><small style="color: red"> {{$message}} </small></b>
+                                    @enderror
+                                </div>
+                                <div class="content-tag">
+                                    <label class="mb-3 block font-medium text-sm text-black dark:text-white">
+                                        Tags (presione la barra espaciadora por cada tag) 
+                                    </label>
+                                    <input type="hidden" name="tagsG" id="tagsG" value="{{json_encode($post->tags)}}">
+                                    <ul id="ulTag">
+                                    <input type="text" name="tags" id="InputTags" placeholder="Tags"                                         
+                                        spellcheck="false"
+                                        class="dark:border-form-strokedark dark:bg-form-input"
+                                    /></ul>
+                                    @error('tags')
+                                        <b><small style="color: red"> {{$message}} </small></b>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="flex justify-end">
-                                @if($publicado==1)
-                                    <div x-data="{ switcherToggle: true }" style="width: 160;">
-                                @elseif($publicado==0)
-                                    <div x-data="{ switcherToggle: false }" style="width: 160;">
-                                @endif                                
+                                <div x-data="{ switcherToggle: true }" style="width: 160;">
                                     <label for="toggle4" class="flex cursor-pointer select-none items-center">
                                         Publicado:&nbsp;
                                         <div class="relative">
-                                            @if($publicado==1)
+                                            @if($post->publicado==1)
                                             <input type="checkbox" name="publicado" id="toggle4" class="sr-only" @change="switcherToggle = !switcherToggle" onchange="prueba();" checked/>
-                                            @elseif($publicado==0)
+                                            @elseif($post->publicado==0)
                                                 <input type="checkbox" name="publicado" id="toggle4" class="sr-only" @change="switcherToggle = !switcherToggle" onchange="prueba();"/>
-                                            @endif                                            
+                                            @endif
                                             <div class="block h-8 w-14 rounded-full bg-meta-9 dark:bg-[#5A616B]"></div>
                                             <div :class="switcherToggle && '!right-1 !translate-x-full !bg-primary dark:!bg-white'" class="dot absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-white transition">
                                                 <span :class="switcherToggle && '!block'" class="hidden">
@@ -97,4 +175,38 @@
     </div>
 </main>
 <!-- ===== Main Content End ===== -->
+
+<script>
+    ClassicEditor
+        .create( document.querySelector( '#body' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+    
+    function slugCreate(){
+        var nombre = document.getElementById("slugNombre").value;
+        nombre = nombre.replace(/\s/g, '-');
+        nombre = nombre.toLowerCase();
+        nombre = nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        document.getElementById("slug").value = nombre;
+    }
+
+    FilePond.registerPlugin(FilePondPluginImagePreview);
+    FilePond.registerPlugin(FilePondPluginFileValidateType);
+    // Get a reference to the file input element
+    const inputElement = document.querySelector('input[type="file"]');
+
+    // Create a FilePond instance
+    const pond = FilePond.create(inputElement);
+    FilePond.setOptions({
+        server: {
+            process: '/postsImg/temp-upload',
+            revert: '/postsImg/temp-delete',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        },
+        acceptedFileTypes: ['image/*'],
+    });
+</script>
 @endsection

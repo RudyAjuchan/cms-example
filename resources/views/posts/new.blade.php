@@ -43,6 +43,7 @@
                                 <input type="text" name="nombre" onkeyup="slugCreate();" placeholder="Nombre Post" class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" 
                                     value="{{ old('nombre')}}"
                                     id="slugNombre"
+                                    value="{{ old('nombre')}}"
                                 />
                                 @error('nombre')
                                     <b><small style="color: red"> {{$message}} </small></b>
@@ -180,6 +181,7 @@
         var nombre = document.getElementById("slugNombre").value;
         nombre = nombre.replace(/\s/g, '-');
         nombre = nombre.toLowerCase();
+        nombre = nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         document.getElementById("slug").value = nombre;
     }
 
