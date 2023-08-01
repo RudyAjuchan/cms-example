@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/restore/{id}', [PostsController::class, 'restore'])->name('posts.restore');
     Route::post('/posts/restores', [PostsController::class, 'restores'])->name('posts.restores');
     Route::post('/postsImg/temp-upload', [PostsController::class, 'tempUpload'])->name('posts.restores');
+    Route::get('/getImg/load-image/{id}', [PostsController::class, 'getImg'])->name('posts.getImg');
     Route::delete('/postsImg/temp-delete', [PostsController::class, 'tempDelete'])->name('posts.restores');    
     /* ================= FIN POSTS ======================== */
 });

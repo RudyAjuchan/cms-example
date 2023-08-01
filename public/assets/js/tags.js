@@ -25,13 +25,15 @@ function addTag(e){
 }
 
 function createTag(){
-    ul.querySelectorAll("li").forEach(li => li.remove());
-    tags.slice().reverse().forEach(tag =>{
-        let liTag = `<li>${tag} <i class="fa-solid fa-circle-xmark" onclick="remove(this, '${tag}')"></i></li>`;
-        ul.insertAdjacentHTML("afterbegin", liTag);
-    });
+    if(tags!=null){
+        ul.querySelectorAll("li").forEach(li => li.remove());
+        tags.slice().reverse().forEach(tag =>{
+            let liTag = `<li>${tag} <i class="fa-solid fa-circle-xmark" onclick="remove(this, '${tag}')"></i></li>`;
+            ul.insertAdjacentHTML("afterbegin", liTag);
+        });
 
-    document.getElementById('tagsG').value=JSON.stringify(tags);
+        document.getElementById('tagsG').value=JSON.stringify(tags);
+    }    
 }
 
 function remove(element, tag){

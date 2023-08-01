@@ -150,4 +150,9 @@ class PostsController extends Controller
             return response('');
         }
     }
+
+    public function getImg($id){
+        $post = posts::where('id', $id)->first();
+        return '/storage/posts/'.$post->image;
+    }
 }

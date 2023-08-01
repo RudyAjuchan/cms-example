@@ -193,6 +193,7 @@
 
     FilePond.registerPlugin(FilePondPluginImagePreview);
     FilePond.registerPlugin(FilePondPluginFileValidateType);
+    FilePond.registerPlugin(FilePondPluginFilePoster);
     // Get a reference to the file input element
     const inputElement = document.querySelector('input[type="file"]');
 
@@ -200,6 +201,7 @@
     const pond = FilePond.create(inputElement);
     FilePond.setOptions({
         server: {
+
             process: '/postsImg/temp-upload',
             revert: '/postsImg/temp-delete',
             headers: {
@@ -207,6 +209,19 @@
             }
         },
         acceptedFileTypes: ['image/*'],
+        files: [
+			{
+				source: '/storage/posts/{{$post->image}}',
+				options: {
+					type: 'local',
+                        metadata: {
+                        poster: '/storage/posts/{{$post->image}}',                        
+                    },                    
+				},
+			}
+		],
+        filePosterHeight: 200,
     });
+
 </script>
 @endsection

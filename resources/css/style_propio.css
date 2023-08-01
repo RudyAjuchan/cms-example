@@ -1,0 +1,23 @@
+.ck-content h1, .ck-content h2, .ck-content h3{
+    font-weight:700;
+}
+
+.ck-content ol{
+    list-style: decimal !important;
+    margin: 5px 20px;
+    padding: 5px;
+}
+.ck-content ul{
+    list-style:disc !important;
+    margin: 5px 20px;
+    padding: 5px;
+}
+/* 
+.filepond--file-poster img{
+    height: 100px;
+}
+
+.filepond--file-poster-overlay{
+    display: none;
+}
+ */

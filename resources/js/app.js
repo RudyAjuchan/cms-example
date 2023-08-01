@@ -1,22 +1,22 @@
-import "jsvectormap/dist/css/jsvectormap.css";
-import "flatpickr/dist/flatpickr.min.css";
-import "../css/style.css";
+/* import "jsvectormap/dist/css/jsvectormap.css"; */
+/* import "flatpickr/dist/flatpickr.min.css"; */
+import "../css/style_propio.css";
 
 import Alpine from "alpinejs";
 import persist from '@alpinejs/persist'
-import flatpickr from "flatpickr";
+/* import flatpickr from "flatpickr";
 import chart01 from "./components/chart-01";
 import chart02 from "./components/chart-02";
 import chart03 from "./components/chart-03";
 import chart04 from "./components/chart-04";
-import map01 from "./components/map-01";
+import map01 from "./components/map-01"; */
 
 Alpine.plugin(persist)
 window.Alpine = Alpine;
 Alpine.start();
 
 // Init flatpickr
-flatpickr(".datepicker", {
+/* flatpickr(".datepicker", {
   mode: "range",
   static: true,
   monthSelectorType: "static",
@@ -36,13 +36,14 @@ flatpickr(".datepicker", {
     // eslint-disable-next-line no-param-reassign
     instance.element.value = dateStr.replace("to", "-");
   },
-});
+}); */
 
 // Document Loaded
-document.addEventListener("DOMContentLoaded", () => {
+/* document.addEventListener("DOMContentLoaded", () => {
   chart01();
   chart02();
   chart03();
   chart04();
   map01();
 });
+ */
