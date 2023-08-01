@@ -228,7 +228,7 @@
                             title: "Atención",
                             text: "¡Se ha eliminado correctamente!",
                         }).then(function () {
-                            window.location.href = "/categorias";
+                            window.location.href = "/posts";
                         });
                     });
                 } else {
@@ -283,7 +283,7 @@
                             title: "Atención",
                             text: "¡Se ha eliminado correctamente!",
                         }).then(function () {
-                            window.location.href = "/categorias";
+                            window.location.href = "/posts";
                         });
                     });
                 } else {
@@ -338,7 +338,7 @@
                             title: "Atención",
                             text: "¡Se ha eliminado correctamente!",
                         }).then(function () {
-                            window.location.href = "/categorias";
+                            window.location.href = "/posts";
                         });
                     });
                 } else {
@@ -420,7 +420,7 @@
                             title: "Atención",
                             text: "¡Se ha eliminado correctamente!",
                         }).then(function () {
-                            window.location.href = "/categorias";
+                            window.location.href = "/posts";
                         });
                     });
                 } else {

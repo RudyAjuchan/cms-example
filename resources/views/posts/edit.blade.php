@@ -133,7 +133,11 @@
                             </div>
 
                             <div class="flex justify-end">
-                                <div x-data="{ switcherToggle: true }" style="width: 160;">
+                                @if($post->publicado==1)
+                                    <div x-data="{ switcherToggle: true }" style="width: 160;">
+                                @elseif($post->publicado==0)
+                                    <div x-data="{ switcherToggle: false }" style="width: 160;">
+                                @endif  
                                     <label for="toggle4" class="flex cursor-pointer select-none items-center">
                                         Publicado:&nbsp;
                                         <div class="relative">

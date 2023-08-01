@@ -1,12 +1,16 @@
 const ul = document.getElementById("ulTag"),
 input = document.getElementById("InputTags");
 let tagsDefault = document.getElementById("tagsG").value;
+let tags;
 
-if(tagsDefault!="" && tagsDefault!=null){
+console.log(tagsDefault.length);
+if(tagsDefault!="" && tagsDefault!='null'){
     tags = JSON.parse(tagsDefault);
     createTag();
+    console.log("pasa con tags");
 }else{
     tags = [];
+    console.log("pasa sin tags");
 }
 
 input.addEventListener("keyup", addTag);
@@ -14,6 +18,7 @@ input.addEventListener("keyup", addTag);
 function addTag(e){
     if(e.keyCode  == 32){
         let tag = e.target.value.replace(/\s+/g, ' ');
+        console.log(tag);
         if(tag.length > 1 && !tags.includes(tag)){            
             tag.split(',').forEach(tag => {
                 tags.push(tag);

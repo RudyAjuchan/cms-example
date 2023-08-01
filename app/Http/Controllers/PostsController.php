@@ -108,24 +108,113 @@ class PostsController extends Controller
     public function edit($id)
     {
         $post = posts::find($id);
-        $categorias = Categorias::all();
+        $categorias = Categorias::where('estado',1)->where('publicado',1)->get();
         return view('posts.edit', compact('post', 'categorias'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, posts $posts)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nombre' => ['required'],
+            'slug' => ['required'],
+            'body' => ['required'],
+            'image' => ['required'],
+            'categorias_id' => ['required'],
+        ]);
+        $postGuardado = posts::where('id', $id)->first();
+        if($request->image == '/storage/posts/'.$postGuardado->image){
+            $publicado = 0;
+            if($request->publicado == "on"){
+                $publicado = 1;
+            }
+
+            $datosTags = json_decode(stripslashes($request->tagsG),true);
+
+            $post = posts::where('id',$id)->first();
+            $post->nombre = $request->nombre;
+            $post->body = $request->body;
+            $post->publicado = $publicado;
+            $post->tags = $datosTags;
+            $post->categorias_id = $request->categorias_id;
+            $post->save();
+        }else{
+            $temp_file = TemporalFile::where('folder', $request->image)->first();
+            Storage::copy('posts/temp/'.$temp_file->folder.'/'.$temp_file->file, 'posts/'.$temp_file->folder.'/'.$temp_file->file);
+
+            $publicado = 0;
+            if($request->publicado == "on"){
+                $publicado = 1;
+            }
+
+            $datosTags = json_decode(stripslashes($request->tagsG),true);
+
+            $post = posts::where('id',$id)->first();
+            $post->nombre = $request->nombre;
+            $post->body = $request->body;
+            $post->image =  $temp_file->folder.'/'.$temp_file->file;
+            $post->publicado = $publicado;
+            $post->tags = $datosTags;
+            $post->categorias_id = $request->categorias_id;
+            $post->save();
+            Storage::deleteDirectory('posts/temp/'.$temp_file->folder);
+            $folderEliminar = explode("/", $postGuardado->image);
+            Storage::deleteDirectory('posts/'.$folderEliminar[0]);
+            $temp_file->delete();
+        }
+        return redirect('/posts')->with('edit', 'Done!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(posts $posts)
+    public function destroy($id)
     {
-        //
+        $post = posts::find($id);
+        $post->estado = 0;
+        $post->save();
+        return redirect('/posts')->with('delete', 'Done!');
+    }
+
+    public function deletes(Request $request){
+        $datos = explode(",", $request->ids);
+        foreach($datos as $ID){
+            $post = posts::find($ID);
+            $post->estado = 0;
+            $post->save();
+        }
+        return $request;
+    }
+
+    public function restore($id)
+    {
+        $post = posts::find($id);
+        $post->estado = 1;
+        $post->save();
+        return redirect('/posts')->with('restore', 'Done!');
+    }
+
+    public function restores(Request $request){
+        $datos = explode(",", $request->ids);        
+        foreach($datos as $ID){
+            $post = posts::find($ID);
+            $post->estado = 1;
+            $post->save();
+        }
+        return $request;
+    }
+
+    public function deletesDefinitive(Request $request){
+        $datos = explode(",", $request->ids);
+        foreach($datos as $ID){
+            $post = posts::find($ID);
+            $folderEliminar = explode("/", $post->image);
+            Storage::deleteDirectory('posts/'.$folderEliminar[0]);
+            $post->delete();
+        }
+        return $request;
     }
 
     public function tempUpload(Request $request){
